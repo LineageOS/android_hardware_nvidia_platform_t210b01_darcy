@@ -33,6 +33,7 @@
 #include "darcy-platforms/tegra210b01-darcy-thermal-fan-est.dtsi"
 #include "foster-platforms/tegra210-loki-e-keys-p2530-0032-e00.dtsi"
 #include <tegra210-soc/tegra210-audio.dtsi>
+#include <audio/tegra210-audio-dai-links.dtsi>
 #include "darcy-platforms/tegra210b01-darcy-cpufreq.dtsi"
 #include "darcy-platforms/tegra210b01-darcy-power-dvfs.dtsi"
 #include "foster-platforms/tegra210-foster-powermon-p2530-0930-e01.dtsi"
@@ -198,6 +199,10 @@
 	aconnect@702c0000 {
 #endif
 
+	adsp_audio {
+		status = "disabled";
+	};
+
 	adma: adma@702e2000 {
 		dma-channels = <2>;
 	};
@@ -210,7 +215,7 @@
 			regulator-supplies = "vdd-1v8-spi-hv", "vdd-1v8-spi-hv-bias";
 			vdd-1v8-spi-hv-supply = <&max77620_sd3>;
 			vdd-1v8-spi-hv-bias-supply = <&max77620_sd3>;
-			fsync-width = <0>;
+			bclk-ratio = <4>;
 		};
 	};
 #if defined(LINUX_VERSION) && LINUX_VERSION >= 409
@@ -683,125 +688,18 @@
 	sound_card: sound {
 #if defined(LINUX_VERSION) && LINUX_VERSION >= 409
 		compatible = "nvidia,tegra-audio-t210ref-mobile-rt565x";
-		nvidia,model = "tegra-snd-t210ref-mobile-rt565x";
+		nvidia-audio-card,name = "tegra-snd-t210ref-mobile-rt565x";
 
-		clocks = <&tegra_car TEGRA210_CLK_PLL_P_OUT1>,
-			<&tegra_car TEGRA210_CLK_PLL_A>,
-			<&tegra_car TEGRA210_CLK_PLL_A_OUT0>,
-			<&tegra_car TEGRA210_CLK_D_AUDIO>,
-			<&tegra_car TEGRA210_CLK_CLK_M>,
-			<&tegra_car TEGRA210_CLK_EXTERN1>;
-		clock-names = "pll_p_out1", "pll_a", "pll_a_out0", "ahub",
-			"clk_m", "extern1";
-
-		assigned-clocks = <&tegra_car TEGRA210_CLK_PLL_A>,
-			<&tegra_car TEGRA210_CLK_PLL_A_OUT0>,
-			<&tegra_car TEGRA210_CLK_D_AUDIO>,
-			<&tegra_car TEGRA210_CLK_EXTERN1>;
-		assigned-clock-rates = <368640000>, <36864000>,
-			<36864000>, <12288000>;
-		nvidia,num-codec-link = <2>;
-
-		nvidia,audio-routing =
-			"y Headphone", 	"y OUT",
-			"y IN",		"y Mic",
-			"x Headphone",	"x OUT",
-			"x IN",		"x Mic";
-
-		nvidia,xbar = <&tegra_axbar>;
-
-		/* The codec-dai here is initialized to dummy and will be   */
-		/* replaced with rt565x codec-dai on detecting super-module */
-		nvidia,dai-link-1 {
-			link-name = "rt565x-playback";
-			cpu-dai = <&tegra_i2s2>;
-			codec-dai = <&spdif_dit0>;
-			cpu-dai-name = "I2S2";
-			codec-dai-name = "dit-hifi";
-			tx-mask = <0xFF>;
-			rx-mask = <0xFF>;
-			format = "dsp_a";
-			bitclock-slave;
-			frame-slave;
-			bitclock-inversion;
-			frame-noninversion;
-			bit-format = "s16_le";
-			bclk_ratio = <4>;
-			srate = <48000>;
-			num-channel = <1>;
-			ignore_suspend;
-			name-prefix = "y";
-		};
-
-		nvidia,dai-link-2 {
-			link-name = "spdif-dit-1";
-			cpu-dai = <&tegra_i2s1>;
-			codec-dai = <&spdif_dit1>;
-			cpu-dai-name = "I2S1";
-			codec-dai-name = "dit-hifi";
-			format = "i2s";
-			bitclock-slave;
-			frame-slave;
-			bitclock-inversion;
-			frame-noninversion;
-			bit-format = "s16_le";
-			bclk_ratio = <1>;
-			srate = <48000>;
-			num-channel = <2>;
-			ignore_suspend;
-			name-prefix = "x";
-		};
+		clocks = <&tegra_car TEGRA210_CLK_PLL_A>,
+			 <&tegra_car TEGRA210_CLK_PLL_A_OUT0>,
+			 <&tegra_car TEGRA210_CLK_EXTERN1>;
+		clock-names = "pll_a", "pll_a_out0", "extern1";
+		assigned-clocks = <&tegra_car TEGRA210_CLK_EXTERN1>;
+		assigned-clock-parents = <&tegra_car TEGRA210_CLK_PLL_A_OUT0>;
 
 #else
 		compatible = "nvidia,tegra-audio-t210ref-mobile-foster";
-		nvidia,model = "tegra-snd-t210ref-mobile-es755";
-		nvidia,num-codec-link = <2>;
-
-		nvidia,audio-routing =
-			"y Headphone", 	"y OUT",
-			"y IN",		"y Mic",
-			"x Headphone",	"x OUT",
-			"x IN",		"x Mic";
-
-		nvidia,xbar = <&tegra_axbar>;
-
-		nvidia,dai-link-1 {
-			link-name = "spdif-dit-1";
-			cpu-dai = <&tegra_i2s2>;
-			codec-dai = <&spdif_dit1>;
-			cpu-dai-name = "I2S2";
-			codec-dai-name = "dit-hifi";
-			format = "dsp_a";
-			bitclock-slave;
-			frame-slave;
-			bitclock-inversion;
-			frame-noninversion;
-			bit-format = "s16_le";
-			bclk_ratio = <4>;
-			srate = <8000>;
-			num-channel = <1>;
-			name-prefix = "y";
-		};
-
-		nvidia,dai-link-2 {
-			link-name = "spdif-dit-2";
-			cpu-dai = <&tegra_i2s1>;
-			codec-dai = <&spdif_dit2>;
-			cpu-dai-name = "I2S1";
-			codec-dai-name = "dit-hifi";
-			format = "i2s";
-			bitclock-slave;
-			frame-slave;
-			bitclock-inversion;
-			frame-noninversion;
-			bit-format = "s16_le";
-			bclk_ratio = <1>;
-			srate = <48000>;
-			num-channel = <2>;
-			ignore_suspend;
-			name-prefix = "x";
-		};
-
+		nvidia-audio-card,name = "tegra-snd-t210ref-mobile-es755";
 #endif
 	};
 
@@ -875,6 +773,7 @@
 			status = "disabled";
 		};
 	};
+
 	emcb01_dvb_dvfs_override {
 		compatible = "nvidia,t210b01-emc-dvb-dvfs";
 		nvidia,freq-x-bin-min-volt = <204000 750 750 750
@@ -884,4 +783,9 @@
 			1331200		800 800 800
 			1600000		800 800 800>;
 	};
+};
+
+&i2s2_to_codec {
+	format = "dsp_a";
+	bitclock-inversion;
 };
