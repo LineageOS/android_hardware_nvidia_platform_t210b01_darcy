@@ -833,16 +833,24 @@
 		status = "disabled";
 	};
 
-	efuse@7000f800 {
-		efuse-burn {
-			nvidia,redundant-aid-war;
-		};
-	};
-
 	rtc {
 		nvidia,pmc-wakeup = <&tegra_pmc PMC_WAKE_TYPE_EVENT 16
 				     PMC_TRIGGER_TYPE_HIGH>;
 	};
+
+	efuse@7000f800 {
+#if LINUX_VERSION < 419
+		efuse-burn {
+			nvidia,redundant-aid-war;
+		};
+#endif
+	};
+
+#if LINUX_VERSION >= 419
+	efuse-burn {
+		nvidia,redundant-aid-war;
+	};
+#endif
 
 	nvdumper {
 		status = "okay";
