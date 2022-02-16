@@ -32,7 +32,6 @@
 #include <t210-common-platforms/tegra210-ers-hdmi-e2190-1100-a00.dtsi>
 #include "darcy-platforms/tegra210b01-darcy-thermal-fan-est.dtsi"
 #include "foster-platforms/tegra210-loki-e-keys-p2530-0032-e00.dtsi"
-#include <dt-bindings/iio/meter/ina3221x.h>
 #include <tegra210-soc/tegra210-audio.dtsi>
 #include "darcy-platforms/tegra210b01-darcy-cpufreq.dtsi"
 #include "darcy-platforms/tegra210b01-darcy-power-dvfs.dtsi"
@@ -807,21 +806,21 @@
 	};
 
 	i2c@7000c400 {
-		ina3221x: ina3221x@40 {
+		ina3221: ina3221@40 {
 			channel@0 {
 				reg = <0x0>;
-				ti,rail-name = "VDD_NOOP";
-				ti,shunt-resistor-mohm = <5>;
+				label = "VDD_NOOP";
+				shunt-resistor-micro-ohms = <5000>;
 			};
 			channel@1 {
 				reg = <0x1>;
-				ti,rail-name = "VDD_IO";
-				ti,shunt-resistor-mohm = <5>;
+				label = "VDD_IO";
+				shunt-resistor-micro-ohms = <5000>;
 			};
 			channel@2 {
 				reg = <0x2>;
-				ti,rail-name = "VDD_SYS";
-				ti,shunt-resistor-mohm = <5>;
+				label = "VDD_SYS";
+				shunt-resistor-micro-ohms = <5000>;
 			};
 		};
 	};
