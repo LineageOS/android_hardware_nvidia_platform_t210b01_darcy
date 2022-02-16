@@ -213,7 +213,7 @@
 		};
 
 		vdd_disp_3v0: regulator@12 {
-			compatible = "regulator-fixed-sync";
+			compatible = "regulator-fixed-sync", "regulator-fixed";
 			reg = <12>;
 			regulator-name = "vdd-disp-3v0";
 			regulator-min-microvolt = <3000000>;
@@ -225,7 +225,7 @@
 		};
 
 		vdd_fan: regulator@13 {
-			compatible = "regulator-fixed-sync";
+			compatible = "regulator-fixed-sync", "regulator-fixed";
 			reg = <13>;
 			regulator-name = "vdd-fan";
 			regulator-min-microvolt = <5000000>;
@@ -237,7 +237,7 @@
 		};
 
 		usb_vbus1: regulator@14 {
-			compatible = "regulator-fixed-sync";
+			compatible = "regulator-fixed-sync", "regulator-fixed";
 			reg = <14>;
 			regulator-name = "usb-vbus1";
 			regulator-min-microvolt = <5000000>;
@@ -248,7 +248,7 @@
 		};
 
 		usb_vbus2: regulator@15 {
-			compatible = "regulator-fixed-sync";
+			compatible = "regulator-fixed-sync", "regulator-fixed";
 			reg = <15>;
 			regulator-name = "usb-vbus2";
 			regulator-min-microvolt = <5000000>;
@@ -259,7 +259,7 @@
 		};
 
 		vdd_3v3_eth: regulator@16 {
-			compatible = "regulator-fixed-sync";
+			compatible = "regulator-fixed-sync", "regulator-fixed";
 			reg = <16>;
 			regulator-name = "vdd-3v3-eth-a02";
 			regulator-min-microvolt = <3300000>;
@@ -282,7 +282,7 @@
 		};
 
 		vdd_hdmi_standby: regulator@18 {
-			compatible = "regulator-fixed-sync";
+			compatible = "regulator-fixed-sync", "regulator-fixed";
 			reg = <5>;
 			regulator-name = "vdd-hdmi-standby";
 			regulator-min-microvolt = <1800000>;
