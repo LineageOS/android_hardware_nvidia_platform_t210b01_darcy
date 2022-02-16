@@ -28,8 +28,8 @@
 		};
 	};
 
-	thermal-fan-est {
-		name = "thermal-fan-est";
+	thermal_fan_est {
+		name = "thermal_fan_est";
 		compatible = "thermal-fan-est";
 		status = "okay";
 		num_resources = <0>;
