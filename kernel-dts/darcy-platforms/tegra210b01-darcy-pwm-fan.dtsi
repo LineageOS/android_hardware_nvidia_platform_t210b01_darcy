@@ -31,7 +31,7 @@
 		fan_startup_time = <5000>;
 		continuous_gov_boot_on;
 		profiles {
-			default = "quiet";
+			default = "cool";
 			quiet {
 				state_cap = <4>;
 				active_pwm = <0 13100 13100 32000 40960 61440 62720 64000 64512 65535>;
